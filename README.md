@@ -174,6 +174,11 @@ h265conv/
 - **[ffmpeg](https://ffmpeg.org/)** — Video encoding (NVENC + libx265)
 - **Windows API** — Registry, SHFileOperation, process management
 
+## Support the Project
+If you find EZ265 useful, please consider supporting the development!
+
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/ServalC4t)
+
 ## License
 
 [MIT](LICENSE) — Copyright 2026 ServalC4t
