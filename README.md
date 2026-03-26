@@ -21,7 +21,7 @@
 
 ---
 
-EZ265 (H.265 一発変換) is a lightweight, portable Windows desktop app that converts video files to H.265/HEVC with minimal effort. Drag, drop, click — done.
+EZ265 is a lightweight, portable Windows desktop app that converts video files to H.265/HEVC with minimal effort. Drag, drop, click — done.
 
 ## Features
 
