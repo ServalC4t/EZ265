@@ -6,23 +6,26 @@ import (
 	"fmt"
 	"os"
 
+	"h265conv/internal/i18n"
+
 	"golang.org/x/sys/windows/registry"
 )
 
 const (
 	shellKeyName = `*\shell\H265Convert`
-	menuLabel    = "H265一発変換"
 )
 
 // IsRegistered checks if the context menu entry exists.
 func IsRegistered() bool {
-	key, err := registry.OpenKey(registry.CLASSES_ROOT, shellKeyName, registry.READ)
+	// Check HKCU first (most common)
+	hkcuPath := `Software\Classes\` + shellKeyName
+	key, err := registry.OpenKey(registry.CURRENT_USER, hkcuPath, registry.READ)
 	if err == nil {
 		key.Close()
 		return true
 	}
-	hkcuPath := `Software\Classes\` + shellKeyName
-	key, err = registry.OpenKey(registry.CURRENT_USER, hkcuPath, registry.READ)
+	// Check HKCR (legacy / admin install)
+	key, err = registry.OpenKey(registry.CLASSES_ROOT, shellKeyName, registry.READ)
 	if err == nil {
 		key.Close()
 		return true
@@ -31,24 +34,21 @@ func IsRegistered() bool {
 }
 
 // Register adds the cascading context menu entry with two sub-items.
+// Always registers under HKCU (no admin required, always deletable).
 func Register() error {
 	exePath, err := os.Executable()
 	if err != nil {
 		return fmt.Errorf("cannot determine exe path: %w", err)
 	}
 
-	// Try HKCR (requires admin)
-	if err := registerUnder(registry.CLASSES_ROOT, shellKeyName, exePath); err == nil {
-		return nil
-	}
-
-	// Fallback to HKCU
 	hkcuPath := `Software\Classes\` + shellKeyName
 	return registerUnder(registry.CURRENT_USER, hkcuPath, exePath)
 }
 
 func registerUnder(root registry.Key, keyPath, exePath string) error {
-	// Create parent key: H265一発変換 (cascading menu)
+	menuLabel := i18n.T("ctx.menu_label")
+
+	// Create parent key: cascading menu
 	key, _, err := registry.CreateKey(root, keyPath, registry.SET_VALUE)
 	if err != nil {
 		return err
@@ -66,14 +66,15 @@ func registerUnder(root registry.Key, keyPath, exePath string) error {
 		return err
 	}
 
-	// Sub-item 1: 動画を追加
+	// Sub-item 1: Add video
+	addLabel := i18n.T("ctx.add")
 	addKeyPath := keyPath + `\shell\01add`
 	addKey, _, err := registry.CreateKey(root, addKeyPath, registry.SET_VALUE)
 	if err != nil {
 		return err
 	}
 	defer addKey.Close()
-	if err := addKey.SetStringValue("", "動画を追加"); err != nil {
+	if err := addKey.SetStringValue("", addLabel); err != nil {
 		return err
 	}
 	if err := addKey.SetStringValue("Icon", fmt.Sprintf("%s,0", exePath)); err != nil {
@@ -89,14 +90,15 @@ func registerUnder(root registry.Key, keyPath, exePath string) error {
 		return err
 	}
 
-	// Sub-item 2: 動画を追加してスタート
+	// Sub-item 2: Add video and start
+	startLabel := i18n.T("ctx.add_start")
 	startKeyPath := keyPath + `\shell\02start`
 	startKey, _, err := registry.CreateKey(root, startKeyPath, registry.SET_VALUE)
 	if err != nil {
 		return err
 	}
 	defer startKey.Close()
-	if err := startKey.SetStringValue("", "動画を追加してスタート"); err != nil {
+	if err := startKey.SetStringValue("", startLabel); err != nil {
 		return err
 	}
 	if err := startKey.SetStringValue("Icon", fmt.Sprintf("%s,0", exePath)); err != nil {
@@ -111,14 +113,16 @@ func registerUnder(root registry.Key, keyPath, exePath string) error {
 	return startCmdKey.SetStringValue("", fmt.Sprintf(`"%s" --encode "%%1"`, exePath))
 }
 
-// Unregister removes the context menu entry.
+// Unregister removes the context menu entry from both HKCU and HKCR.
 func Unregister() error {
-	errCR := deleteKeyTree(registry.CLASSES_ROOT, shellKeyName)
 	hkcuPath := `Software\Classes\` + shellKeyName
 	errCU := deleteKeyTree(registry.CURRENT_USER, hkcuPath)
 
-	if errCR != nil && errCU != nil {
-		return fmt.Errorf("HKCR: %v; HKCU: %v", errCR, errCU)
+	// Also try HKCR in case it was registered there previously (admin)
+	errCR := deleteKeyTree(registry.CLASSES_ROOT, shellKeyName)
+
+	if errCU != nil && errCR != nil {
+		return fmt.Errorf("HKCU: %v; HKCR: %v", errCU, errCR)
 	}
 	return nil
 }

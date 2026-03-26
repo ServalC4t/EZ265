@@ -338,6 +338,13 @@ func (a *App) create(initialFiles []string, autoStart bool) error {
 		return err
 	}
 
+	// Set window icon from exe resource (large + small)
+	if exePath, err := os.Executable(); err == nil {
+		if ico, err := walk.NewIconExtractedFromFileWithSize(exePath, 0, 48); err == nil {
+			a.mw.SetIcon(ico)
+		}
+	}
+
 	// Set up queue with synchronized callback (starts paused)
 	a.queue = encoder.NewQueue(a.ffmpeg, a.settings, func(job *encoder.Job) {
 		a.mw.Synchronize(func() {

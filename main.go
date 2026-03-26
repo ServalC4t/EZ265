@@ -9,6 +9,7 @@ import (
 	"h265conv/internal/gui"
 	"h265conv/internal/i18n"
 	"h265conv/internal/ipc"
+	"h265conv/internal/registry"
 )
 
 func main() {
@@ -21,6 +22,14 @@ func main() {
 	case "en":
 		i18n.SetLang(i18n.LangEN)
 	// "auto" or empty: keep OS-detected default
+	}
+
+	// Check for --uninstall flag
+	for _, arg := range os.Args[1:] {
+		if strings.EqualFold(arg, "--uninstall") {
+			doUninstall()
+			return
+		}
 	}
 
 	mode, files := parseArgs()
@@ -46,6 +55,28 @@ func main() {
 		fmt.Fprintf(os.Stderr, "GUI error: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+func doUninstall() {
+	if registry.IsRegistered() {
+		if err := registry.Unregister(); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to remove context menu: %v\n", err)
+		} else {
+			fmt.Println("Context menu entries removed.")
+		}
+	} else {
+		fmt.Println("No context menu entries found.")
+	}
+
+	// Remove settings file
+	appData := os.Getenv("APPDATA")
+	if appData != "" {
+		settingsDir := appData + `\h265conv`
+		os.RemoveAll(settingsDir)
+		fmt.Println("Settings removed.")
+	}
+
+	fmt.Println("Uninstall complete. You can now delete this folder.")
 }
 
 func parseArgs() (ipc.Mode, []string) {

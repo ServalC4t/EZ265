@@ -73,7 +73,7 @@ func GetUserDefaultUILanguage() uint16 {
 var table = map[Lang]map[string]string{
 	LangJA: {
 		// Window
-		"app.title": "H.265 一発変換",
+		"app.title": "EZ265 - H.265 一発変換",
 
 		// Table columns
 		"col.filename": "ファイル名",
@@ -149,6 +149,11 @@ var table = map[Lang]map[string]string{
 		"menu.help":      "ヘルプ",
 		"menu.about":     "このソフトについて",
 
+		// Context menu
+		"ctx.menu_label": "EZ265",
+		"ctx.add":        "動画を追加",
+		"ctx.add_start":  "動画を追加してスタート",
+
 		// About dialog
 		"about.title": "H.265 一発変換 について",
 		"about.text": "H.265 一発変換  v1.0\n\n" +
@@ -167,7 +172,7 @@ var table = map[Lang]map[string]string{
 	},
 	LangEN: {
 		// Window
-		"app.title": "H.265 Converter",
+		"app.title": "EZ265 - H.265 Converter",
 
 		// Table columns
 		"col.filename": "File Name",
@@ -242,6 +247,11 @@ var table = map[Lang]map[string]string{
 		"menu.lang_en":   "English",
 		"menu.help":      "Help",
 		"menu.about":     "About",
+
+		// Context menu
+		"ctx.menu_label": "EZ265",
+		"ctx.add":        "Add video",
+		"ctx.add_start":  "Add video & Start",
 
 		// About dialog
 		"about.title": "About H.265 Converter",
