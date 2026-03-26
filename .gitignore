@@ -1,0 +1,30 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Resource files (generated)
+*.syso
+
+# Binary dependencies
+bin/
+
+# Build output
+dist/
+*.zip
+
+# User settings
+settings.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
