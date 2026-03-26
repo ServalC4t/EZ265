@@ -77,7 +77,7 @@ Output is always H.265/HEVC in an MP4 container with `hvc1` tag and `faststart` 
 2. Drag & drop video files onto the window (or click "+ Add Files")
 3. Adjust compression rate with the slider (default: 50%)
 4. Click "▶ Start"
-5. Converted files appear in a "H265一発変換" subfolder
+5. Converted files appear in a "EZ265" subfolder
 ```
 
 ### Explorer Right-Click Menu
