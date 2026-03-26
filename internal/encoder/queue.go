@@ -405,7 +405,7 @@ func (q *Queue) processJob(job *Job) {
 }
 
 // outputPath builds the output file path based on settings.
-// Default: saves to "H265一発変換" subfolder alongside the source file.
+// Default: saves to "EZ265" subfolder alongside the source file.
 // If MoveToTrash: uses a temp name in the subfolder, later renamed to original path.
 func (q *Queue) outputPath(inputPath string, settings SettingsData) string {
 	dir := filepath.Dir(inputPath)
@@ -424,10 +424,10 @@ func (q *Queue) outputPath(inputPath string, settings SettingsData) string {
 	if settings.MoveToTrash {
 		// Temp file: will be renamed to original path after trash move
 		tmpName := fmt.Sprintf("%s_h265_tmp%s", base, ext)
-		return filepath.Join(dir, "H265一発変換", tmpName)
+		return filepath.Join(dir, "EZ265", tmpName)
 	}
 
 	// Normal: output to subfolder with suffix
 	outName := fmt.Sprintf("%s%s%s", base, suffix, ext)
-	return filepath.Join(dir, "H265一発変換", outName)
+	return filepath.Join(dir, "EZ265", outName)
 }
