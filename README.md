@@ -5,7 +5,8 @@
   </p>
   <p align="center">
     <a href="#features">Features</a> &bull;
-    <a href="#installation">Installation</a> &bull;
+    <a href="#quality-comparison">Quality</a> &bull;
+    <a href="#installation">Install</a> &bull;
     <a href="#usage">Usage</a> &bull;
     <a href="#build-from-source">Build</a> &bull;
     <a href="#license">License</a>
@@ -39,6 +40,15 @@ EZ265 (H.265 一発変換) is a lightweight, portable Windows desktop app that c
 | **Single Instance** | Additional files are sent to the running instance via TCP IPC |
 | **Portable** | No installation required — just unzip and run |
 
+## Quality Comparison
+
+> 4K drone footage encoded at each compression rate (10%–90%) using NVENC hevc_nvenc.
+> Cropped and enlarged from the same frame for side-by-side comparison.
+
+<p align="center">
+  <img src="docs/quality_comparison.png" alt="H.265 Bitrate Quality Comparison" width="100%">
+</p>
+
 ## Supported Formats
 
 | Input | Extensions |
@@ -49,9 +59,9 @@ Output is always H.265/HEVC in an MP4 container with `hvc1` tag and `faststart` 
 
 ## Installation
 
-1. Download the latest release from [**Releases**](../../releases)
-2. Extract the zip file anywhere
-3. Run `h265conv.exe`
+1. Download **`EZ265_v1.0.0_Setup.exe`** from [**Releases**](../../releases/latest)
+2. Run the installer (installs to Program Files, no admin required)
+3. Optionally enable desktop shortcut and Explorer right-click menu during setup
 
 > **Requirements:**
 > - Windows 10 or 11 (64-bit)
